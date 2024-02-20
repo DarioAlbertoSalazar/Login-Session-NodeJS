@@ -65,7 +65,7 @@ app.post('/login', (req,res)=>{
             bycrypt.compare(password, result[0].password, (error, match)=>{
                 if(error) throw error;
                 if(match) {
-                    const token = jwt.sign({id: result[0].id, username: result[0].username}, process.env.JWT_SECRET,{ expiresIn: '10m'})
+                    const token = jwt.sign({id: result[0].id, username: result[0].username}, process.env.JWT_SECRET,{ expiresIn: '1h'})
                     res.json({success:true, token, message:"Login correcto"})
                 } else {
                     res.status(401).json({success:false, message:"credenciales incorrectas"})
