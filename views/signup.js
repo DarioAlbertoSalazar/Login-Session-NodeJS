@@ -9,7 +9,7 @@ function validarNombreUsuario() {
   return true;
 }
 
-document.getElementById("signupForm").addEventListener("submit", (event) => {
+document.getElementById("signUpForm").addEventListener("submit", (event) => {
     event.preventDefault();
     const username = document.getElementById("username").value;
     const pass = document.getElementById("password").value;
@@ -29,5 +29,8 @@ document.getElementById("signupForm").addEventListener("submit", (event) => {
         }
       })
       .catch((err) => console.error("Error: ", err));
+  });  
+
+  document.getElementById("LoginForm").addEventListener("click", () => {
+    window.location.href = "./login.html";
   });
-  

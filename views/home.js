@@ -17,6 +17,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
+fetch("/task", {
+  method: "GET"
+})
+.then((response) => response.json())
+.then((data) => {
+  console.log(data)
+})
+
 let input = document.getElementById("inputText");
 let list = document.getElementById("list");
 let minimalValue = 3;
