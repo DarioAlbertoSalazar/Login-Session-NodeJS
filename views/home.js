@@ -37,23 +37,43 @@ fetch("/task", {
 
     // Establecer la cadena HTML de las filas en el tbody
     tbody.innerHTML = tableRows;
+
+    //edit button
     const editButtons = document.querySelectorAll(".edit-btn");
     editButtons.forEach((button, index) => {
       button.addEventListener("click", () => {
-        // Aquí puedes implementar la lógica para editar el elemento correspondiente
-        console.log("Editar elemento en la posición", index);
+        const editTaskId = data[index].id;
+
+        // Alerta para el título
+        const nuevoTitulo = prompt("Introduce el nuevo título:");
+        if (nuevoTitulo !== null) {
+          // Si el usuario no cancela, procedemos con la alerta para la descripción
+          const nuevaDescripcion = prompt("Introduce la nueva descripción:");
+          if (nuevaDescripcion !== null) {
+            // Si el usuario no cancela, llamamos a la función para editar el elemento
+            editarElemento(editTaskId, {
+              title: nuevoTitulo,
+              description: nuevaDescripcion,
+            });
+          }
+        }
       });
     });
+
+    //delete button
+    let taskIds = [];
+    taskIds = data.map((task) => task.id);
     const deleteButtons = document.querySelectorAll(".delete-btn");
     deleteButtons.forEach((button, index) => {
       button.addEventListener("click", () => {
-        // Aquí puedes implementar la lógica para eliminar el elemento correspondiente
+        const deleteTaskId = data[index].id; // Obtener el ID de la tarea correspondiente al botón de eliminar
+        eliminarElemento(deleteTaskId);
         console.log("Eliminar elemento en la posición", index);
       });
     });
   });
 
-
+// add new value
 document.getElementById("taskForm").addEventListener("submit", (event) => {
   const title = document.getElementById("title").value;
   const description = document.getElementById("description").value;
@@ -64,7 +84,51 @@ document.getElementById("taskForm").addEventListener("submit", (event) => {
     body: JSON.stringify({ title, description }),
   })
     .then((response) => response.json())
-    .then((data) => {
-    })
     .catch((err) => console.error("Error al agregar la tarea: ", err));
 });
+
+function editarElemento(id, nuevosDatos) {
+  fetch(`/task/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(nuevosDatos),
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json(); // Leer y devolver el cuerpo de la respuesta JSON
+      } else {
+        throw new Error("Error al editar el elemento");
+      }
+    })
+    .then((data) => {
+      console.log("edit", data.message); // Mensaje de confirmación del servidor
+      // Actualizar la página después de editar el elemento
+      window.location.reload();
+    })
+    .catch((error) => {
+      console.error("Error de red:", error);
+    });
+}
+
+function eliminarElemento(id) {
+  fetch(`/task/${id}`, {
+    method: "DELETE",
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json(); // Leer y devolver el cuerpo de la respuesta JSON
+      } else {
+        throw new Error("Error al eliminar el elemento");
+      }
+    })
+    .then((data) => {
+      console.log(data.message); // Mensaje de confirmación del servidor
+      window.location.reload();
+      // Aquí puedes realizar acciones adicionales después de eliminar el elemento
+    })
+    .catch((error) => {
+      console.error("Error de red:", error);
+    });
+}

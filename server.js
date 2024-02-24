@@ -173,7 +173,7 @@ app.delete("/task/:id", async (req, res) => {
   const deleteRow = await Task.destroy({
     where: { id: req.params.id },
   });
-  res.json({ message: "Deleted: " + deleteRow });
+  res.json({ message: "Task Deleted: " + deleteRow });
 });
 
 
