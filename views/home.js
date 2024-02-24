@@ -13,85 +13,58 @@ document.addEventListener("DOMContentLoaded", () => {
   })
     .then((response) => response.json())
     .then((data) => {
+      localStorage.setItem("id", data.id);
       document.querySelector("h1").innerHTML = `Bienvenido ${data.user}`;
     });
 });
 
 fetch("/task", {
-  method: "GET"
+  method: "GET",
 })
-.then((response) => response.json())
-.then((data) => {
-  console.log(data)
-})
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+    const tbody = document.querySelector("tbody"); // Obtener la referencia al tbody de la tabla
 
-let input = document.getElementById("inputText");
-let list = document.getElementById("list");
-let minimalValue = 3;
-let listNum = 0;
-addList = () => {
-  // get
-  let inputText = filterList(input.value);
-  // set
-  if (inputText) {
-    list.innerHTML += ` <li class=" my-3 py-3 shadow list-group-item " id="list${listNum}">
-                <div class="row">
-                <div class="col-1">
-                <input class="" type="checkbox" id="check${listNum}" onclick="done(${listNum})">
-                </div>
-                <div class="col-6">
-                    <span class=" h4" id="text${listNum}"> ${inputText} </span>
-                </div>
-                <div class="col-4">
-                     <i class="bi bi-trash" onclick="deleteList(${listNum})"></i>
-                     <i class="bi bi-pencil-fill" onclick="editList(${listNum})"></i>
-                </div>                  
-                 </div>    
-                </li> `;
-    input.value = " ";
-    listNum++;
-  }
-};
+    // Crear una cadena HTML para todas las filas de la tabla
+    const tableRows = data
+      .map((obj) => {
+        if (obj.title) {
+          return `<tr><td>${obj.title}</td><td>${obj.description}</td><td><button class="edit-btn">Edit</button><button class="delete-btn">Delete</button></td></tr>`;
+        }
+      })
+      .join(""); // Unir todas las filas en una sola cadena HTML
 
-done = (listId) => {
-  let checkbox = document.getElementById(`check${listId}`);
-  let current = document.getElementById(`text${listId}`);
-  let classExit = current.classList.contains("text-decoration-line-through");
-  if (classExit == true) {
-    current.classList.remove("text-decoration-line-through");
-  } else {
-    current.classList.add("text-decoration-line-through");
-  }
-};
+    // Establecer la cadena HTML de las filas en el tbody
+    tbody.innerHTML = tableRows;
+    const editButtons = document.querySelectorAll(".edit-btn");
+    editButtons.forEach((button, index) => {
+      button.addEventListener("click", () => {
+        // Aquí puedes implementar la lógica para editar el elemento correspondiente
+        console.log("Editar elemento en la posición", index);
+      });
+    });
+    const deleteButtons = document.querySelectorAll(".delete-btn");
+    deleteButtons.forEach((button, index) => {
+      button.addEventListener("click", () => {
+        // Aquí puedes implementar la lógica para eliminar el elemento correspondiente
+        console.log("Eliminar elemento en la posición", index);
+      });
+    });
+  });
 
-filterList = (x) => {
-  if (x) {
-    if (x.length >= minimalValue) {
-      return x;
-    } else {
-      alert("Please enter more than 3 words");
-    }
-  } else {
-    return false;
-  }
-};
 
-editList = (listId) => {
-  let currentText = document.getElementById(`text${listId}`);
-  let newText = prompt("Wanna Change list?", currentText.innerHTML);
-  if (filterList(newText)) {
-    currentText.innerHTML = newText;
-  }
-};
+document.getElementById("taskForm").addEventListener("submit", (event) => {
+  const title = document.getElementById("title").value;
+  const description = document.getElementById("description").value;
 
-deleteList = (listId) => {
-  let current = document.getElementById(`text${listId}`).innerHTML;
-  let deleteComfirm = confirm(`Are you sure to delete ${current}`);
-  if (deleteComfirm) {
-    let p = document.getElementById("list");
-    let c = document.getElementById(`list${listId}`);
-    p.removeChild(c);
-  } else {
-    console.log("deleted");
-  }
-};
+  fetch("/task", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ title, description }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+    })
+    .catch((err) => console.error("Error al agregar la tarea: ", err));
+});

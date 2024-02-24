@@ -1,13 +1,3 @@
-function validarNombreUsuario() {
-  var nombreUsuario = document.getElementById("username").value;
-  var letras = /^[A-Za-z]+$/;
-
-  if (!nombreUsuario.match(letras)) {
-    alert("El nombre de usuario solo puede contener letras.");
-    return false;
-  }
-  return true;
-}
 document.getElementById("signInForm").addEventListener("submit", (event) => {
   event.preventDefault();
   const username = document.getElementById("username").value;

@@ -44,7 +44,7 @@ app.get("/signup", (req, res) => {
 });
 
 app.get("/home", authenticateToken, (req, res) => {
-  res.json({ user: req.user.username });
+  res.json({ user: req.user.username, id: req.user.id });
 });
 
 // Sin sequelize
@@ -67,12 +67,17 @@ app.get("/home", authenticateToken, (req, res) => {
 app.post("/signup", async (req, res) => {
   try {
     const { username, password } = req.body;
+    const existingUser = await LoginForm.findOne({ where: { username } });
+
+    if (existingUser) {
+      return res.status(400).json({ success: false, message: "El usuario ya existe" });
+    }
     const hashedPassword = await bycrypt.hash(password, 10);
     const newUser = await LoginForm.create({
       username,
       password: hashedPassword,
     });
-    res.json({ success: true, message: "User was created successfully" });
+    res.json({ success: true, message: "Usuario se creó de manera exitosa" });
   } catch (error) {
     console.error("Error on signup:", error);
     res.status(500).json({ success: false, message: "Error on signup" });
@@ -134,6 +139,22 @@ app.post("/login", async (req, res) => {
 app.get("/task", async (req, res) => {
   const tasks = await Task.findAll();
   res.json(tasks);
+});
+
+app.get("/tasks/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+    const tasks = await Task.findAll({
+      include: [{
+        model: LoginForm,
+        where: { id: userId }
+      }]
+    });
+    res.json(tasks);
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    res.status(500).json({ success: false, message: "Error fetching tasks" });
+  }
 });
 
 app.put("/task/:id", async (req, res) => {
