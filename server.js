@@ -7,7 +7,7 @@ const bycrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sequelize = require("./sequelize_conn.js");
 const Task = require("./Task.js");
-const LoginForm = require("./LoginForm.js");
+const User = require("./User.js");
 const port = process.env.PORT || 3001;
 const app = express();
 
@@ -67,13 +67,13 @@ app.get("/home", authenticateToken, (req, res) => {
 app.post("/signup", async (req, res) => {
   try {
     const { username, password } = req.body;
-    const existingUser = await LoginForm.findOne({ where: { username } });
+    const existingUser = await User.findOne({ where: { username } });
 
     if (existingUser) {
       return res.status(400).json({ success: false, message: "El usuario ya existe" });
     }
     const hashedPassword = await bycrypt.hash(password, 10);
-    const newUser = await LoginForm.create({
+    const newUser = await User.create({
       username,
       password: hashedPassword,
     });
@@ -110,7 +110,7 @@ app.post("/signup", async (req, res) => {
 app.post("/login", async (req, res) => {
   try {
     const { username, password } = req.body;
-    const user = await LoginForm.findOne({ where: { username } });
+    const user = await User.findOne({ where: { username } });
     if (!user) {
       return res.status(404).send("Credenciales incorrectas");
     }
@@ -145,10 +145,7 @@ app.get("/tasks/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
     const tasks = await Task.findAll({
-      include: [{
-        model: LoginForm,
-        where: { id: userId }
-      }]
+      where: { UserId: userId } // Filtra las tareas por el ID del usuario
     });
     res.json(tasks);
   } catch (error) {
@@ -175,8 +172,6 @@ app.delete("/task/:id", async (req, res) => {
   });
   res.json({ message: "Task Deleted: " + deleteRow });
 });
-
-
 
 
 app.listen(port, () => {

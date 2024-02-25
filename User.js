@@ -1,18 +1,18 @@
 const sequelize = require("./sequelize_conn.js");
 const { DataTypes, Model } = require("sequelize");
 
-class LoginForm extends Model {}
+class User extends Model {}
 
-LoginForm.init(
+User.init(
   {
     username: DataTypes.STRING,
     password: DataTypes.STRING,
   },
   {
     sequelize,
-    modelName: "LoginForm",
-    tableName: "LoginForm",
+    modelName: "User",
+    tableName: "User",
   }
 );
 
-module.exports = LoginForm;
+module.exports = User;

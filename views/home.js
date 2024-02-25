@@ -11,7 +11,12 @@ document.addEventListener("DOMContentLoaded", () => {
       Athorization: `Bearer ${token}`,
     },
   })
-    .then((response) => response.json())
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
     .then((data) => {
       localStorage.setItem("id", data.id);
       document.querySelector("h1").innerHTML = `Bienvenido ${data.user}`;
@@ -21,7 +26,12 @@ document.addEventListener("DOMContentLoaded", () => {
 fetch("/task", {
   method: "GET",
 })
-  .then((response) => response.json())
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    return response.json();
+  })
   .then((data) => {
     console.log(data);
     const tbody = document.querySelector("tbody"); // Obtener la referencia al tbody de la tabla
