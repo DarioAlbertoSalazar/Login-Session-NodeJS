@@ -70,7 +70,9 @@ app.post("/signup", async (req, res) => {
     const existingUser = await User.findOne({ where: { username } });
 
     if (existingUser) {
-      return res.status(400).json({ success: false, message: "El usuario ya existe" });
+      return res
+        .status(400)
+        .json({ success: false, message: "El usuario ya existe" });
     }
     const hashedPassword = await bycrypt.hash(password, 10);
     const newUser = await User.create({
@@ -145,7 +147,7 @@ app.get("/tasks/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;
     const tasks = await Task.findAll({
-      where: { UserId: userId } // Filtra las tareas por el ID del usuario
+      where: { UserId: userId },
     });
     res.json(tasks);
   } catch (error) {
@@ -172,7 +174,6 @@ app.delete("/task/:id", async (req, res) => {
   });
   res.json({ message: "Task Deleted: " + deleteRow });
 });
-
 
 app.listen(port, () => {
   console.log("Server is running on port: ", port);
