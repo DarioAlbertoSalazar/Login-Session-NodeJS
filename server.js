@@ -27,7 +27,7 @@ app.use(express.json());
 // });
 
 const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers["athorization"];
+  const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
 
   if (token == null) return res.sendStatus(401);
@@ -136,10 +136,10 @@ app.post("/login", async (req, res) => {
 
 // --- TODO APP API's --- //
 
-app.get("/task", async (req, res) => {
-  const tasks = await Task.findAll();
-  res.json(tasks);
-});
+// app.get("/task", async (req, res) => {
+//   const tasks = await Task.findAll();
+//   res.json(tasks);
+// });
 
 app.get("/tasks/:userId", async (req, res) => {
   try {

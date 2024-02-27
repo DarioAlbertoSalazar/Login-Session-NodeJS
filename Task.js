@@ -7,7 +7,7 @@ Task.init(
   {
     title: DataTypes.STRING,
     description: DataTypes.STRING,
-    loginFormId: DataTypes.INTEGER
+    UserId: DataTypes.INTEGER
   },
   {
     sequelize,

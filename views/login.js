@@ -14,6 +14,7 @@ document.getElementById("signInForm").addEventListener("submit", (event) => {
         console.log(data);
         localStorage.setItem("token", data.token);
         window.location.href = "/home.html";
+        window.location.reload();
       } else {
         alert("Tu usuario o contraseña es incorrecto");
       }

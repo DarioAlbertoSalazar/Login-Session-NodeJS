@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   fetch("/home", {
     method: "GET",
     headers: {
-      Athorization: `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   })
     .then((response) => {
@@ -23,7 +23,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-fetch("/task", {
+const userId = localStorage.getItem("id"); // Obtener el userId del localStorage
+
+fetch(`/tasks/${userId}`,{
   method: "GET",
 })
   .then((response) => {
@@ -87,11 +89,12 @@ fetch("/task", {
 document.getElementById("taskForm").addEventListener("submit", (event) => {
   const title = document.getElementById("title").value;
   const description = document.getElementById("description").value;
+  const userId = localStorage.getItem("id")
 
   fetch("/task", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title, description }),
+    body: JSON.stringify({ title, description, UserId: userId}),
   })
     .then((response) => response.json())
     .catch((err) => console.error("Error al agregar la tarea: ", err));
