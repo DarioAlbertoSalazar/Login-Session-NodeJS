@@ -74,17 +74,21 @@ app.post("/signup", async (req, res) => {
         .status(400)
         .json({ success: false, message: "El usuario ya existe" });
     }
+
     const hashedPassword = await bycrypt.hash(password, 10);
     const newUser = await User.create({
       username,
       password: hashedPassword,
     });
-    res.json({ success: true, message: "Usuario se creó de manera exitosa" });
+
+    res.json({ success: true, message: "Usuario se creó de manera exitosa", newUser });
   } catch (error) {
     console.error("Error on signup:", error);
     res.status(500).json({ success: false, message: "Error on signup" });
   }
 });
+
+
 
 // Sin sequelize
 // app.post('/login', (req,res)=>{
@@ -178,3 +182,5 @@ app.delete("/task/:id", async (req, res) => {
 app.listen(port, () => {
   console.log("Server is running on port: ", port);
 });
+
+module.exports = app
