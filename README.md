@@ -1,8 +1,72 @@
-Este es el proyecto final del curso de Backend con NodeJS
 
-Es un proyecto CRUD, la base de datos esta creada en SQL, backend con NodeJS con express y para el frontend con HTML, Boostrap y JavaScript
+# Todo-List
 
-Es un login con autentificacion de usuario que al momento de entrar puedes acceder a un listado de cosas por hacer o un Todo list
+This is the final project of the Backend with NodeJS course.
 
-Para poder correr el proyecto, clonar el proyecto en tu ambiente local, despues instalar las dependencias con "npm install"
-para poder iniciar el proyecto pueder utilizar el comando "npm run start"
+It is a CRUD project
+Database: SQL with Sequelize.
+Backend: NodeJS with Express.
+Frontend: HTML, CSS and JavaScript.
+
+It is a login with user authentication that at the moment of entering you can see an Todo list app.
+
+In SQL you have to create a database called todolist:
+
+1 CREATE DATABASE todolist;
+
+You have to create an .env file and inside this file the following fields will be included
+
+PORT = 3000
+DB_HOST = 
+DB_USER = 
+DB_PASSWORD = 
+DB_NAME = todolist // this is what your database should be called
+JWT_SECRET = 
+
+After following the steps of Run Locally it will automatically create the tables inside the database.
+
+## Run Locally
+
+Clone the project
+
+```bash
+  git clone git@github.com:DarioAlbertoSalazar/Todo-List-CRUD.git
+```
+
+Go to the project directory
+
+```bash
+  cd my-project
+```
+
+Install dependencies
+
+```bash
+  npm install
+```
+
+Start the server
+
+```bash
+  npm run start
+```
+
+Go to
+
+```bash
+  "http://localhost:3000/signup.html"
+```
+
+## Running Tests
+
+To run tests, run the following command
+
+```bash
+  npm run test
+```
+
+## Tech Stack
+
+**Client:** HTML, CSS, JavaScript
+
+**Server:** NodeJS, Express, SQL, Sequelize

@@ -142,11 +142,6 @@ app.post("/login", async (req, res) => {
 
 // --- TODO APP API's --- //
 
-// app.get("/task", async (req, res) => {
-//   const tasks = await Task.findAll();
-//   res.json(tasks);
-// });
-
 app.get("/tasks/:userId", async (req, res) => {
   try {
     const userId = req.params.userId;

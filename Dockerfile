@@ -1,15 +1,27 @@
-FROM node:14
+# Etapa de construcción
+FROM node:14-alpine AS builder
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-COPY package*,json ./
+# Instala las dependencias de la aplicación
+COPY package*.json ./
 
 RUN npm install
 
+# Copia el resto de los archivos de la aplicación
 COPY . .
 
-FROM nginx:stable-alphine
+# Compila la aplicación (si es necesario)
+RUN npm run start
 
-EXPOSE 3000
+# Etapa de producción
+FROM nginx:alpine
 
-CMD ["node", "server.js"]
+# Copia los archivos estáticos de la etapa de construcción
+COPY --from=builder /app/public /usr/share/nginx/html
+
+# Exponer el puerto 80 (puerto predeterminado de Nginx)
+EXPOSE 80
+
+# CMD predeterminado de la imagen de Nginx para iniciar el servidor
+CMD ["nginx", "-g", "daemon off;"]
