@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken");
 const sequelize = require("./sequelize_conn.js");
 const Task = require("./Task.js");
 const User = require("./User.js");
-const port = process.env.PORT || 3001;
+const port = process.env.NODE_DOCKER_PORT || 8080;
 const app = express();
 
 sequelize.sync();
